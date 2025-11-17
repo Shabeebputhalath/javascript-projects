@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Weather app</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		/* small additional styles for the card shadow and fitted sizes */
+		.weather-card {
+			width: 380px;
+			max-width: 90vw;
+		}
+	
+	</style>
+</head>
+
+<body class="bg-slate-800 min-h-screen flex items-center justify-center p-6">
+	<div class="weather-card bg-gradient-to-b from-emerald-300 via-sky-300 to-violet-600 rounded-3xl p-6 shadow-2xl text-white">
+		<!-- search row -->
+		<div class="flex items-center gap-3 mb-6">
+			<input id="input" type="text" spellcheck="false" placeholder="Enter your city name"
+				class="flex-1 h-12 text-lg px-5 rounded-full bg-white/90 text-slate-900 placeholder:text-slate-500 focus:outline-none" />
+			<button id="button" class="w-12 h-12 rounded-full bg-white/90  flex items-center justify-center">
+				<!-- magnifier SVG -->
+				<img src="./img/serch.png-removebg-preview.png" alt="">
+			</button>
+		</div>
+		<div id="error" class=" text-left text-sm ml-2 mt-2 hidden" >
+			<p>Invalid city name</p>
+
+		</div>
+
+		<!-- center icon and temperature -->
+		<div id="weather"  class="flex flex-col items-center py-6 hidden ">
+			<!-- sun icon -->
+			<div class="icon-bg rounded-full  flex items-center justify-center mb-4">
+				<img class="h-62 w-[150px]" src="./img/cloud.png-removebg-preview.png" alt="">
+			</div>
+
+			<!-- temp -->
+			<div id="temp" class="text-[72px] font-semibold leading-none">3<span class="text-3xl align-top">°C</span></div>
+			<div id="cityName" class="text-4  xl mt-2 font-normal">New York</div>
+		</div>
+
+		<!-- bottom stats -->
+		<div id="weather" class="flex items-center justify-between mt-6 hidden">
+			<div class="flex items-center gap-3">
+				<!-- humidity icon -->
+				<img class="h-[90px] w-12 mb-4" src="./img/humidity.png-removebg-preview.png" alt="">
+				<div>
+					<div id="humidity" class="text-xl font-semibold">48%</div>
+					<div class="text-sm opacity-80">Humidity</div>
+				</div>
+			</div>
+
+			<div class="flex items-center gap-3">
+				<!-- wind icon -->
+				<img class="h-[70px] w-12 mb-5" src="./img/preview-removebg-preview.png" alt="">
+				<div>
+					<div id="wind" class="text-xl font-semibold">10.29 km/h</div>
+					<div class="text-sm opacity-80">Wind Speed</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		const apiKey = "5772d760a5bdfc49a5fdb8f82f11b05f";
+		const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+		const serchBox = document.querySelector("#input");
+		const searchBtn = document.querySelector("#button");
+
+		async function checkWeather(city) {
+    const response = await fetch(apiUrl + city+ `&appid=${apiKey}`);
+    if(response.status == 404){
+		document.querySelector("#error").classList.remove("hidden");
+	
+	}else{
+		document.querySelector("#error").classList.add("hidden");
+	}
+    var data = await response.json();
+
+	   document.querySelector("#cityName").innerText = data.name;
+	   document.querySelector("#temp").innerText = Math.round(data.main.temp)  + "°c";
+	   document.querySelector("#humidity").innerText = data.main.humidity + "%";
+	   document.querySelector("#wind").innerText = data.wind.speed + " km/h"; 
+
+	   if(data.weather[0].main == "Clouds")
+	   {
+		   document.querySelector(".icon-bg img").src = "./img/cloud.png-removebg-preview.png";
+	   }
+	   else if(data.weather[0].main == "Clear")
+	   {
+		   document.querySelector(".icon-bg img").src = "./img/clear.png-removebg-preview.png";
+	   }
+	   else if(data.weather[0].main == "Rain")
+	   {
+		   document.querySelector(".icon-bg img").src = "./img/rain.png-removebg-preview.png";
+	   }
+	   else if(data.weather[0].main == "Drizzle")
+	   {
+		   document.querySelector(".icon-bg img").src = "./img/drizzle.png-removebg-preview.png";
+	   }
+	   else if(data.weather[0].main == "Mist")
+	   {
+		   document.querySelector(".icon-bg img").src = "./img/mist.png-removebg-preview.png";
+	   }
+
+	   
+	   document.querySelectorAll("#weather").forEach(element => {
+		   element.classList.remove("hidden");
+	   });
+
+
+}
+searchBtn.addEventListener("click", () => {
+	checkWeather(serchBox.value);
+});
+		
+		
+	</script>
+</body>
+</html>
