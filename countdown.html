@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Countdown</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		/* small custom tweaks */
+		.bg-hero {
+			background-image: url('./img/earth.png');
+			background-size: cover;
+			background-position: center;
+		}
+		#rocket {
+            animation: rocket 4s linear infinite;
+        }
+        @keyframes rocket{
+            0%{
+                bottom: 0;
+                opacity: 0;
+            }
+            100%{
+                bottom: 100%;
+                opacity: 1;
+            }
+        }
+	
+		
+	</style>
+</head>
+<body class="min-h-screen bg-hero relative antialiased ">
+	
+    <!-- header made absolute so it doesn't affect centering -->
+    <header class="absolute top-0 left-0 w-full z-20">
+        <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+            <a href="#" class="text-white text-3xl font-bold">Countdown App</a>
+            
+        </div>
+    </header>
+	<div class="absolute inset-0 bg-gradient-to-br from-purple-900/85 via-violet-800/55 to-pink-700/30"></div>
+
+	<!-- main content -->
+	<main class="relative z-10 max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center gap-10 md:gap-20 justify-start min-h-screen">
+		<section class="md:w-1/2 text-white ">
+			<p class="text-sm uppercase tracking-widest opacity-80 mb-3">Website Is Under Maintenance</p>
+			<h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
+				We're <span class="text-orange-400">Launching</span> Soon
+			</h1>
+
+			<!-- static countdown placeholders -->
+			<div class="flex gap-4 mt-8 items-end flex-wrap">
+				<div class="bg-white/10 rounded-xl p-4 flex flex-col items-center text-center count-num">
+					<span id="days" class="text-3xl sm:text-4xl md:text-5xl font-semibold">00</span>
+					<span class="text-xs opacity-80 mt-1">Days</span>
+				</div>
+				<div class="bg-white/10 rounded-xl p-4 flex flex-col items-center text-center count-num">
+					<span id="hours" class="text-3xl sm:text-4xl md:text-5xl font-semibold">00</span>
+					<span class="text-xs opacity-80 mt-1">Hours</span>
+				</div>
+				<div class="bg-white/10 rounded-xl p-4 flex flex-col items-center text-center count-num">
+					<span id="minutes" class="text-3xl sm:text-4xl md:text-5xl font-semibold">00</span>
+					<span class="text-xs opacity-80 mt-1">Minutes</span>
+				</div>
+				<div class="bg-white/10 rounded-xl p-4 flex flex-col items-center text-center count-num">
+					<span id="seconds" class="text-3xl sm:text-4xl md:text-5xl font-semibold">00</span>
+					<span class="text-xs opacity-80 mt-1">Seconds</span>
+				</div>
+			</div>
+
+			<div class="mt-8 flex gap-4">
+				<a href="#" class="inline-flex items-center gap-3 px-5 py-3 bg-white/10 border border-white/40 rounded-md text-white hover:bg-white/15">Learn More
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+					</svg>
+				</a>
+			</div>
+            <img id="rocket" class="absolute w-52 bottom-0 right-3" src="img/rocket-removebg-preview.png" alt="">
+		</section>	
+	</main>
+    <script>
+       var coutDown =new Date("Nov 25, 2025 00:00:00").getTime();
+       var x =setInterval(function(){
+        var now = new Date().getTime();
+        var distance = coutDown - now;
+
+        var days = Math.floor(distance/(1000* 60* 60* 24));
+        var hours = Math.floor((distance % (1000* 60* 60* 24))/(1000* 60* 60));
+        var minutes = Math.floor((distance % (1000* 60* 60))/(1000* 60));
+        var seconds = Math.floor((distance % (1000* 60))/1000);
+
+        document.getElementById("days").innerHTML=days;
+        document.getElementById("hours").innerHTML=hours;   
+        document.getElementById("minutes").innerHTML=minutes;
+        document.getElementById("seconds").innerHTML=seconds;
+
+		if(distance < 0){
+			clearInterval(x);
+	    document.getElementById("days").innerHTML="00";
+        document.getElementById("hours").innerHTML="00";   
+        document.getElementById("minutes").innerHTML="00";
+        document.getElementById("seconds").innerHTML="00";
+		}
+
+
+
+       },1000)
+
+    </script>
+</body>
+</html>
